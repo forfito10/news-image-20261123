@@ -7,7 +7,8 @@ TEAL = "#2dd4bf"
 CREAM = "#f3ede0"
 GRAY = "#aab5c1"
 INK = "#17263a"
-OUT = os.path.join(os.environ.get("MAKEFUN_OUTPUT_DIR", "out"), "entry.png")
+OUT = os.path.join(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"), "entry.png")
+os.makedirs("/output", exist_ok=True)
 
 im = Image.new("RGB", (W, H), NAVY)
 d = ImageDraw.Draw(im)
@@ -15,7 +16,10 @@ font_dir = "/usr/share/fonts/truetype/dejavu"
 regular = os.path.join(font_dir, "DejaVuSans.ttf")
 bold = os.path.join(font_dir, "DejaVuSans-Bold.ttf")
 def f(size, heavy=False):
-    return ImageFont.truetype(bold if heavy else regular, size)
+    try:
+        return ImageFont.truetype(bold if heavy else regular, size)
+    except OSError:
+        return ImageFont.load_default()
 
 def text(x, y, value, size, color, heavy=False):
     d.text((x, y), value, font=f(size, heavy), fill=color)
