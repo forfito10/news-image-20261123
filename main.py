@@ -1,152 +1,87 @@
-# news-image-20261123 · revision 3
-#!/usr/bin/env python3
-"""Reusable news-image generator (news-image-20261123, based on proven news22d/repo3 engine).
+import os
+from PIL import Image, ImageDraw, ImageFont
 
-NEXT-RUN USAGE:
-  1. Edit DATE_LINE and STORIES below with 23 Nov 2026 news (5-6 stories, cross-region/field).
-  2. Test: mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py   (check out/entry.png < 1 MiB, 1024x1024)
-  3. Copy out/entry.png to repo root as entry.png, commit, submit.
-"""
-import os, shutil, sys
-try:
-    from PIL import Image, ImageDraw, ImageFont
-except Exception:
-    os.makedirs("/output", exist_ok=True)
-    shutil.copyfile("/bot/entry.png", "/output/entry.png")
-    sys.exit(0)
-
-OUT = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output") + "/entry.png"
 W = H = 1024
-BG = "#101C2C"
-PAPER = "#F4F1E8"
-INK = "#172638"
-MUTED = "#A8B5C2"
-TEAL = "#63D5C0"
-CORAL = "#FF776D"
-GOLD = "#F5C968"
-BLUE = "#79AFFF"
+NAVY = "#0e1a2b"
+TEAL = "#2dd4bf"
+CREAM = "#f3ede0"
+GRAY = "#aab5c1"
+INK = "#17263a"
+OUT = os.path.join(os.environ.get("MAKEFUN_OUTPUT_DIR", "out"), "entry.png")
 
-# ---------------- EDIT ONLY THIS BLOCK NEXT RUN ----------------
-DATE_LINE = "Monday 23 November 2026"
-SUBHEAD = "Five stories moving the world"
-STORIES = [
-    # STORIES — authored 23 Nov r4
-    (CORAL, "Tech · Redmond", ["Microsoft: patch AI", "flaws with care"],
-     ["IANS: rushing AI-exposure fixes", "risks fresh downtime for firms.", "23 Nov  /  IANS"], "ai"),
-    (GOLD, "Markets · SF", ["Anthropic's IPO road", "was no normal float"],
-     ["Bankers bridled at tight founder", "control, like the SpaceX float.", "23 Nov  /  BS"], "market"),
-    (BLUE, "Politics · DC", ["Democrats hit 258", "House seats record"],
-     ["AP: the mark fell Sunday; wave", "gains from the general vote.", "23 Nov  /  AP"], "diplomacy"),
-    (TEAL, "Climate · Portsmouth", ["UK digs reservoirs", "against drought"],
-     ["£800m Havant Thicket rising", "near Portsmouth right now.", "23 Nov  /  SBS"], "climate"),
-]
-# Wide bottom story (diplomatic dispatch style)
-WIDE = {
-    "region": "EUROPE  /  ANTALYA", "accent": CORAL, "kind": "fire",
-    "title": "COP31 collapses: no deal, first time in 17 years",
-    "l1": "EU and ~130 parties threw out a text that",
-    "l2": "skipped fossil fuels; AI fears hit stocks.  /  23 Nov",
-    "badge": "CLIMATE",
-}
-FOOTER_LEFT = "WORLD DESK  •  Filed 23 November 2026"
-# ----------------------------------------------------------------
-
-def font(size, bold=False):
-    candidates = (["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"] if bold else
-                  ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"])
-    for path in candidates:
-        if os.path.exists(path):
-            return ImageFont.truetype(path, size)
-    return ImageFont.load_default()
-
-im = Image.new("RGB", (W, H), BG)
+im = Image.new("RGB", (W, H), NAVY)
 d = ImageDraw.Draw(im)
+font_dir = "/usr/share/fonts/truetype/dejavu"
+regular = os.path.join(font_dir, "DejaVuSans.ttf")
+bold = os.path.join(font_dir, "DejaVuSans-Bold.ttf")
+def f(size, heavy=False):
+    return ImageFont.truetype(bold if heavy else regular, size)
 
-def rr(box, radius, fill, outline=None, width=1):
-    d.rounded_rectangle(box, radius=radius, fill=fill, outline=outline, width=width)
+def text(x, y, value, size, color, heavy=False):
+    d.text((x, y), value, font=f(size, heavy), fill=color)
 
-def text(x, y, s, size, fill=INK, bold=False, anchor=None):
-    d.text((x, y), s, font=font(size, bold), fill=fill, anchor=anchor)
+def badge(cx, cy, kind, color):
+    r = 39
+    d.ellipse((cx-r, cy-r, cx+r, cy+r), fill="#203b52")
+    if kind == "chip":
+        d.rounded_rectangle((cx-19, cy-19, cx+19, cy+19), radius=5, outline=color, width=3)
+        d.rectangle((cx-8, cy-8, cx+8, cy+8), outline=color, width=2)
+        for n in (-12, 0, 12):
+            d.line((cx-25, cy+n, cx-19, cy+n), fill=color, width=3)
+            d.line((cx+19, cy+n, cx+25, cy+n), fill=color, width=3)
+    elif kind == "chart":
+        d.line((cx-22, cy+19, cx-22, cy-20), fill=color, width=3)
+        d.line((cx-22, cy+19, cx+23, cy+19), fill=color, width=3)
+        d.line((cx-16, cy+9, cx-4, cy-2, cx+6, cy+5, cx+19, cy-13), fill=color, width=4, joint="curve")
+    elif kind == "flag":
+        d.line((cx-16, cy+23, cx-16, cy-23), fill=color, width=4)
+        d.polygon(((cx-13,cy-20),(cx+21,cy-13),(cx+5,cy+1),(cx-13,cy-4)), outline=color)
+        d.line((cx-13, cy-20, cx+21, cy-13, cx+5, cy+1, cx-13, cy-4), fill=color, width=3)
+    else:
+        for off in (-10, 2, 14):
+            d.arc((cx-24, cy+off-9, cx+24, cy+off+9), 200, 340, fill=color, width=3)
 
-def line(points, fill, width=4):
-    d.line(points, fill=fill, width=width, joint="curve")
+text(46, 26, "THE WORLD / DAILY BRIEF", 17, TEAL, True)
+text(747, 28, "NO. 327  •  GLOBAL", 15, "#d5dde5", True)
+text(46, 65, "Monday 23 November 2026", 49, "#ffffff", True)
+text(48, 130, "Five stories moving the world today", 20, GRAY)
 
-def icon(kind, cx, cy, color):
-    d.ellipse((cx-49, cy-49, cx+49, cy+49), fill="#20364A")
-    if kind == "climate":
-        d.ellipse((cx-17, cy-24, cx+17, cy+10), outline=color, width=5)
-        for a,b in [(-34,-24),(-31,2),(34,-24),(31,2),(0,-39)]:
-            line([(cx+a,cy+b),(cx+a*1.18,cy+b*1.18)], color, 3)
-        line([(cx-31,cy+20),(cx-12,cy+13),(cx+5,cy+22),(cx+30,cy+14)], color, 5)
-        line([(cx-31,cy+32),(cx-12,cy+25),(cx+5,cy+34),(cx+30,cy+26)], color, 5)
-    elif kind == "ai":
-        rr((cx-27,cy-27,cx+27,cy+27),8,None,color,4)
-        for dx,dy in [(-37,-16),(-37,0),(-37,16),(37,-16),(37,0),(37,16),(-16,-37),(0,-37),(16,-37),(-16,37),(0,37),(16,37)]:
-            line([(cx+dx,cy+dy),(cx+dx*0.78,cy+dy*0.78)],color,3)
-        d.ellipse((cx-7,cy-7,cx+7,cy+7),fill=color)
-    elif kind == "ship":
-        line([(cx-37,cy+12),(cx+37,cy+12),(cx+23,cy+29),(cx-23,cy+29),(cx-37,cy+12)],color,4)
-        rr((cx-19,cy-12,cx+15,cy+9),3,None,color,4)
-        line([(cx-26,cy+38),(cx-9,cy+33),(cx+8,cy+38),(cx+25,cy+33)],color,3)
-        line([(cx+30,cy-31),(cx+19,cy-18),(cx+31,cy-15),(cx+20,cy-1)],GOLD,4)
-    elif kind == "fire":
-        line([(cx-23,cy+34),(cx,cy-32),(cx+23,cy+34)],color,4)
-        line([(cx-16,cy+10),(cx+16,cy+10)],color,3)
-        line([(cx-20,cy+23),(cx+20,cy+23)],color,3)
-        line([(cx-31,cy-12),(cx+31,cy-12)],color,4)
-        line([(cx+16,cy-27),(cx+28,cy-37),(cx+27,cy-21),(cx+39,cy-28),(cx+32,cy-8)],CORAL,4)
-    elif kind == "diplomacy":
-        line([(cx,cy-34),(cx,cy+35)],color,4)
-        d.polygon([(cx+2,cy-31),(cx+29,cy-22),(cx+2,cy-12)],fill=CORAL)
-        line([(cx-2,cy-5),(cx-30,cy-14),(cx-2,cy-23)],color,4)
-        line([(cx-28,cy+35),(cx+28,cy+35)],color,4)
-    elif kind == "health":
-        line([(cx,cy-28),(cx,cy+28)],color,6)
-        line([(cx-28,cy),(cx+28,cy)],color,6)
-        d.ellipse((cx-34,cy-16,cx-18,cy),outline=color,width=3)
-    elif kind == "market":
-        line([(cx-32,cy+22),(cx-14,cy+4),(cx, cy+14),(cx+16,cy-10),(cx+32,cy-22)],color,4)
+cards = [
+    (46, 184, "#ef6461", "TECH · REDMOND", ["Microsoft: patch AI", "flaws with care"], ["Rushing AI-exposure fixes can", "risk downtime across critical", "systems."], "23 Nov  /  IANS", "chip"),
+    (526, 184, "#e8b44d", "MARKETS · SF", ["Anthropic's IPO road", "was no normal float"], ["Bankers bridled at founder", "control, in a SpaceX echo.", ""], "23 Nov  /  BS", "chart"),
+    (46, 397, "#67a9e8", "POLITICS · DC", ["Democrats hit 258", "House seats record"], ["AP: the mark fell Sunday as", "wave gains reshaped the", "House."], "23 Nov  /  AP", "flag"),
+    (526, 397, TEAL, "CLIMATE · PORTSMOUTH", ["UK digs reservoirs", "against drought"], ["£800m Havant Thicket", "reservoir is rising to help", "secure water supplies."], "23 Nov  /  SBS", "waves"),
+]
+for x, y, accent, kicker, title, body, credit, glyph in cards:
+    d.rounded_rectangle((x, y, x+452, y+194), radius=16, fill=CREAM)
+    d.rounded_rectangle((x, y+13, x+6, y+181), radius=3, fill=accent)
+    text(x+22, y+14, kicker, 12, accent, True)
+    text(x+22, y+39, title[0], 21, INK, True)
+    text(x+22, y+65, title[1], 21, INK, True)
+    for i, line in enumerate(body):
+        if line:
+            text(x+22, y+99+i*19, line, 12, "#66717d")
+    text(x+22, y+164, credit, 11, "#7e8790", True)
+    badge(x+391, y+96, glyph, accent)
 
-def card(x, y, w, h, accent, kicker, title_lines, body_lines, kind):
-    rr((x,y,x+w,y+h),20,PAPER)
-    d.rounded_rectangle((x,y,x+8,y+h),radius=4,fill=accent)
-    icon(kind,x+w-83,y+83,accent)
-    text(x+24,y+20,kicker.upper(),16,accent,True)
-    for i, s in enumerate(title_lines):
-        text(x+24,y+53+i*30,s,24,INK,True)
-    for i, s in enumerate(body_lines):
-        text(x+24,y+123+i*27,s,18,"#3F5060")
+# The evening lead spans the full page width.
+d.rounded_rectangle((46, 615, 978, 916), radius=18, fill="#16324a")
+text(270, 641, "EUROPE  /  ANTALYA", 13, "#ef6461", True)
+d.rounded_rectangle((823, 636, 948, 666), radius=15, fill="#245d68")
+text(851, 643, "CLIMATE", 12, TEAL, True)
+text(270, 681, "COP31 collapses: no deal, first time in 17 years", 27, "#ffffff", True)
+text(270, 742, "EU and ~130 parties threw out a text that", 17, GRAY)
+text(270, 770, "skipped fossil fuels; AI fears hit stocks.  /  23 Nov", 17, GRAY)
+# A ladder beside a small flame marks the summit story.
+d.line((114, 847, 158, 694), fill=TEAL, width=6)
+d.line((185, 847, 158, 694), fill=TEAL, width=6)
+for yy in (817, 783, 749, 715):
+    d.line((125+(817-yy)//4, yy, 179-(817-yy)//4, yy), fill=TEAL, width=4)
+d.polygon(((153,696),(143,677),(157,682),(164,663),(173,686),(166,700)), fill="#ef6461")
 
-# Masthead
-d.rectangle((0,0,W,8),fill=TEAL)
-text(44,31,"THE WORLD / DAILY BRIEF",17,TEAL,True)
-text(980,31,"NO. 327   •   GLOBAL",15,MUTED,True,anchor="ra")
-text(44,66,DATE_LINE,48,PAPER,True)
-text(46,127,SUBHEAD,22,MUTED)
-line([(44,170),(980,170)],"#304254",2)
-
-# Four compact cards
-cw, ch = 454, 264
-positions = [(44,190),(526,190),(44,472),(526,472)]
-for (x,y),(accent,kicker,tl,bl,kind) in zip(positions,STORIES):
-    card(x,y,cw,ch,accent,kicker,tl,bl,kind)
-
-# Wide bottom story
-wd = WIDE
-rr((44,754,980,944),20,"#20364A")
-d.rounded_rectangle((44,754,52,944),radius=4,fill=wd["accent"])
-icon(wd["kind"],126,849,wd["accent"])
-text(202,775,wd["region"],16,wd["accent"],True)
-text(202,808,wd["title"],25,PAPER,True)
-text(202,850,wd["l1"],19,"#D2DCE5")
-text(202,878,wd["l2"],19,"#D2DCE5")
-rr((841,774,954,814),18,"#314D63")
-text(897,794,wd["badge"],13,PAPER,True,anchor="mm")
-
-line([(44,966),(980,966)],"#304254",2)
-text(44,978,FOOTER_LEFT,14,MUTED)
-text(980,978,"5 STORIES / ONE DAY",14,TEAL,True,anchor="ra")
-
+d.line((46, 944, 978, 944), fill="#314457", width=1)
+text(46, 962, "WORLD DESK  •  Reported 23 November 2026", 13, GRAY)
+text(763, 962, "5 STORIES / ONE DAY", 13, TEAL, True)
 os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
-im.save(OUT, format="PNG", optimize=True)
-print("wrote", OUT, os.path.getsize(OUT), "bytes")
+im.save(OUT)
+print(f"wrote {OUT}")
