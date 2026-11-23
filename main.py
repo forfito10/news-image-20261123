@@ -30,25 +30,25 @@ BLUE = "#79AFFF"
 DATE_LINE = "Monday 23 November 2026"
 SUBHEAD = "Five stories moving the world"
 STORIES = [
-    # (accent, kicker, [title lines], [body lines], icon kind, source line)
-    (CORAL, "Cyber · Washington", ["Microsoft warns AI-fix", "race risks outages"],
-     ["IANS: patching AI-exposed flaws", "fast may cause more downtime.", "23 Nov  /  IANS"], "ai"),
-    (GOLD,  "Markets · SF", ["Anthropic ran odd", "path to its IPO"],
-     ["Bankers chafed over tight control,", "echoing the SpaceX listing.", "23 Nov  /  BS"], "market"),
-    (BLUE,  "Politics · US", ["Democrats take 258", "House seats: record"],
-     ["AP: marker reached Sunday; big", "gains from general election.", "23 Nov  /  AP"], "diplomacy"),
-    (TEAL,  "Climate · Portsmouth", ["UK digs reservoirs", "for droughts"],
-     ["£800m Havant Thicket near", "Portsmouth under construction.", "23 Nov  /  SBS"], "climate"),
+    # STORIES — authored 23 Nov r4
+    (CORAL, "Tech · Redmond", ["Microsoft: patch AI", "flaws with care"],
+     ["IANS: rushing AI-exposure fixes", "risks fresh downtime for firms.", "23 Nov  /  IANS"], "ai"),
+    (GOLD, "Markets · SF", ["Anthropic's IPO road", "was anything but usual"],
+     ["Bankers bridled at tight founder", "control, like the SpaceX float.", "23 Nov  /  BS"], "market"),
+    (BLUE, "Politics · DC", ["Democrats hit 258", "House seats, a record"],
+     ["AP: the mark fell Sunday; wave", "gains from the general vote.", "23 Nov  /  AP"], "diplomacy"),
+    (TEAL, "Climate · Portsmouth", ["UK digs reservoirs", "against drought"],
+     ["£800m Havant Thicket rising", "near Portsmouth right now.", "23 Nov  /  SBS"], "climate"),
 ]
 # Wide bottom story (diplomatic dispatch style)
 WIDE = {
     "region": "EUROPE  /  ANTALYA", "accent": CORAL, "kind": "fire",
-    "title": "COP31 collapses: no deal for first time in 17 years",
-    "l1": "EU and ~130 parties rejected a text omitting",
-    "l2": "fossil fuels; markets slid on AI fears.  /  23 Nov",
+    "title": "COP31 collapses: no deal, first time in 17 years",
+    "l1": "EU and ~130 parties threw out a text that",
+    "l2": "skipped fossil fuels; AI fears hit stocks.  /  23 Nov",
     "badge": "CLIMATE",
 }
-FOOTER_LEFT = "WORLD DESK  •  Reported 23 November 2026"
+FOOTER_LEFT = "WORLD DESK  •  Filed 23 November 2026"
 # ----------------------------------------------------------------
 
 def font(size, bold=False):
