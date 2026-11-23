@@ -77,7 +77,6 @@ for x, y, accent, kicker, title, body, credit, glyph in cards:
 
 # A one-line ticker carries four more briefs between the cards and the lead.
 d.rounded_rectangle((46, 604, 978, 668), radius=14, fill="#16324a")
-text(66, 616, "ALSO TODAY", 12, TEAL, True)
 tick = [
     (66, "LIBYA  Ukrainian sea drone sinks", "Russian warship at Benghazi dock"),
     (526, "HORMUZ  Three more ships struck;", "pace highest since February"),
@@ -91,7 +90,7 @@ d.rounded_rectangle((46, 688, 978, 916), radius=18, fill="#16324a")
 text(270, 712, "EUROPE  /  ANTALYA", 13, "#ef6461", True)
 d.rounded_rectangle((823, 707, 948, 737), radius=15, fill="#245d68")
 text(851, 714, "CLIMATE", 12, TEAL, True)
-text(270, 752, "COP31 collapses: no deal, first time in 17 years", 27, "#ffffff", True)
+text(270, 752, "COP31 collapses: no deal, first time in 17 years", 24, "#ffffff", True)
 text(270, 812, "EU and ~130 parties threw out a text that", 17, GRAY)
 text(270, 840, "skipped fossil fuels; markets slid on AI fears.  /  23 Nov", 17, GRAY)
 # A ladder beside a small flame marks the summit story.
