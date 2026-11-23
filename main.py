@@ -55,7 +55,7 @@ def badge(cx, cy, kind, color):
 text(46, 26, "THE WORLD / DAILY BRIEF", 17, TEAL, True)
 text(747, 28, "NO. 327  •  GLOBAL", 15, "#d5dde5", True)
 text(46, 65, "Monday 23 November 2026", 49, "#ffffff", True)
-text(48, 130, "Five stories moving the world today", 20, GRAY)
+text(48, 130, "Nine stories moving the world tonight", 20, GRAY)
 
 cards = [
     (46, 184, "#ef6461", "TECH · REDMOND", ["Microsoft: patch AI", "flaws with care"], ["Rushing AI-exposure fixes can", "risk downtime across critical", "systems."], "23 Nov  /  IANS", "chip"),
@@ -75,24 +75,35 @@ for x, y, accent, kicker, title, body, credit, glyph in cards:
     text(x+22, y+164, credit, 11, "#7e8790", True)
     badge(x+391, y+96, glyph, accent)
 
+# A one-line ticker carries four more briefs between the cards and the lead.
+d.rounded_rectangle((46, 604, 978, 668), radius=14, fill="#16324a")
+text(66, 616, "ALSO TODAY", 12, TEAL, True)
+tick = [
+    (66, "LIBYA  Ukrainian sea drone sinks", "Russian warship at Benghazi dock"),
+    (526, "HORMUZ  Three more ships struck;", "pace highest since February"),
+]
+for x, l1, l2 in tick:
+    text(x, 624, l1, 13, "#d5dde5")
+    text(x, 643, l2, 13, "#d5dde5")
+
 # The evening lead spans the full page width.
-d.rounded_rectangle((46, 615, 978, 916), radius=18, fill="#16324a")
-text(270, 641, "EUROPE  /  ANTALYA", 13, "#ef6461", True)
-d.rounded_rectangle((823, 636, 948, 666), radius=15, fill="#245d68")
-text(851, 643, "CLIMATE", 12, TEAL, True)
-text(270, 681, "COP31 collapses: no deal, first time in 17 years", 27, "#ffffff", True)
-text(270, 742, "EU and ~130 parties threw out a text that", 17, GRAY)
-text(270, 770, "skipped fossil fuels; AI fears hit stocks.  /  23 Nov", 17, GRAY)
+d.rounded_rectangle((46, 688, 978, 916), radius=18, fill="#16324a")
+text(270, 712, "EUROPE  /  ANTALYA", 13, "#ef6461", True)
+d.rounded_rectangle((823, 707, 948, 737), radius=15, fill="#245d68")
+text(851, 714, "CLIMATE", 12, TEAL, True)
+text(270, 752, "COP31 collapses: no deal, first time in 17 years", 27, "#ffffff", True)
+text(270, 812, "EU and ~130 parties threw out a text that", 17, GRAY)
+text(270, 840, "skipped fossil fuels; markets slid on AI fears.  /  23 Nov", 17, GRAY)
 # A ladder beside a small flame marks the summit story.
-d.line((114, 847, 158, 694), fill=TEAL, width=6)
-d.line((185, 847, 158, 694), fill=TEAL, width=6)
-for yy in (817, 783, 749, 715):
-    d.line((125+(817-yy)//4, yy, 179-(817-yy)//4, yy), fill=TEAL, width=4)
-d.polygon(((153,696),(143,677),(157,682),(164,663),(173,686),(166,700)), fill="#ef6461")
+d.line((114, 891, 158, 765), fill=TEAL, width=6)
+d.line((185, 891, 158, 765), fill=TEAL, width=6)
+for yy in (876, 852, 828, 804):
+    d.line((125+(876-yy)//3, yy, 179-(876-yy)//3, yy), fill=TEAL, width=4)
+d.polygon(((153,767),(143,748),(157,753),(164,734),(173,757),(166,771)), fill="#ef6461")
 
 d.line((46, 944, 978, 944), fill="#314457", width=1)
 text(46, 962, "WORLD DESK  •  Reported 23 November 2026", 13, GRAY)
-text(763, 962, "5 STORIES / ONE DAY", 13, TEAL, True)
+text(745, 962, "9 STORIES / ONE DAY", 13, TEAL, True)
 os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
 im.save(OUT)
 print(f"wrote {OUT}")
