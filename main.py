@@ -33,9 +33,9 @@ STORIES = [
     # STORIES — authored 23 Nov r4
     (CORAL, "Tech · Redmond", ["Microsoft: patch AI", "flaws with care"],
      ["IANS: rushing AI-exposure fixes", "risks fresh downtime for firms.", "23 Nov  /  IANS"], "ai"),
-    (GOLD, "Markets · SF", ["Anthropic's IPO road", "was anything but usual"],
+    (GOLD, "Markets · SF", ["Anthropic's IPO road", "was no normal float"],
      ["Bankers bridled at tight founder", "control, like the SpaceX float.", "23 Nov  /  BS"], "market"),
-    (BLUE, "Politics · DC", ["Democrats hit 258", "House seats, a record"],
+    (BLUE, "Politics · DC", ["Democrats hit 258", "House seats record"],
      ["AP: the mark fell Sunday; wave", "gains from the general vote.", "23 Nov  /  AP"], "diplomacy"),
     (TEAL, "Climate · Portsmouth", ["UK digs reservoirs", "against drought"],
      ["£800m Havant Thicket rising", "near Portsmouth right now.", "23 Nov  /  SBS"], "climate"),
