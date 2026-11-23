@@ -1,3 +1,4 @@
+# news-image-20261123 · revision 3
 #!/usr/bin/env python3
 """Reusable news-image generator (news-image-20261123, based on proven news22d/repo3 engine).
 
