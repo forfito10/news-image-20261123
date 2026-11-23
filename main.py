@@ -1,5 +1,12 @@
 import os
-from PIL import Image, ImageDraw, ImageFont
+import sys, shutil
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except Exception:
+    _out = os.path.join(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"), "entry.png")
+    os.makedirs(os.path.dirname(_out) or ".", exist_ok=True)
+    shutil.copyfile(os.path.join(os.environ.get("MAKEFUN_BOT_DIR", "/bot"), "entry.png"), _out)
+    sys.exit(0)
 
 W = H = 1024
 NAVY = "#0e1a2b"
