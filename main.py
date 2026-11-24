@@ -112,11 +112,9 @@ for x, l1, l2 in tick:
 # The evening lead spans the full page width.
 d.rounded_rectangle((46, 688, 978, 916), radius=18, fill="#e8ddc9")
 text(270, 712, "EUROPE  /  ANTALYA", 13, "#9d4f35", True)
-d.rounded_rectangle((823, 707, 948, 737), radius=15, fill="#d7c5a9")
-text(851, 714, "CLIMATE", 12, TEAL, True)
-text(270, 752, "COP31 collapses: no deal, first time in 17 years", 22, INK, True)
-text(270, 812, "EU and ~130 parties threw out a text that", 17, GRAY)
-text(270, 840, "skipped fossil fuels; markets slid on AI fears.  /  23 Nov", 17, GRAY)
+text(270, 752, "COP31 ends with no deal for the first time", 22, INK, True)
+text(270, 812, "EU and ~130 parties rejected a draft that", 17, GRAY)
+text(270, 840, "skipped fossil fuels; AI fears sank stocks.  /  23 Nov", 17, GRAY)
 # Summit emblem: an ascending frame topped by a compact flame.
 left_rail = (114, 891, 158, 765)
 right_rail = (185, 891, 158, 765)
@@ -132,7 +130,7 @@ d.polygon(flame_shape, fill="#ef6461")
 footer_y = 938
 d.line((46, footer_y, 978, footer_y), fill="#c9bba5", width=1)
 text(46, footer_y + 16, "WORLD DESK  •  NOV 23, 2026", 11, MUTED_INK)
-text(788, footer_y + 16, "9 STORIES  /  1 DAY", 11, RUST_ACCENT, True)
+text(788, footer_y + 16, "5 STORIES / 24 HOURS", 11, RUST_ACCENT, True)
 os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
 im.save(OUT)
 print(f"wrote {OUT}")
