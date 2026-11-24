@@ -8,12 +8,20 @@ except Exception:
     shutil.copyfile(os.path.join(os.environ.get("MAKEFUN_BOT_DIR", "/bot"), "entry.png"), _out)
     sys.exit(0)
 
-W = H = 1024
-NAVY = "#f2eadb"
-TEAL = "#9d4f35"
-CREAM = "#fffaf0"
-GRAY = "#726b60"
-INK = "#292b2b"
+ # Warm paper, rust accents, and dark ink set the page's visual palette.
+CANVAS_WIDTH = CANVAS_HEIGHT = 1024
+PAPER_TONE = "#f2eadb"
+RUST_ACCENT = "#9d4f35"
+CARD_TONE = "#fffaf0"
+MUTED_INK = "#726b60"
+PRIMARY_INK = "#292b2b"
+BADGE_BLUE = "#203b52"
+BAR_TONE = "#e8ddc9"
+BAR_INK = "#68645d"
+
+# Keep the compact drawing helpers readable below.
+W, H = CANVAS_WIDTH, CANVAS_HEIGHT
+NAVY, TEAL, CREAM, GRAY, INK = PAPER_TONE, RUST_ACCENT, CARD_TONE, MUTED_INK, PRIMARY_INK
 OUT = os.path.join(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"), "entry.png")
 
 im = Image.new("RGB", (W, H), NAVY)
@@ -51,12 +59,27 @@ def badge(cx, cy, kind, color):
         for off in (-10, 2, 14):
             d.arc((cx-24, cy+off-9, cx+24, cy+off+9), 200, 340, fill=color, width=3)
 
-# A restrained vermilion edge anchors the paper-like page.
-d.rectangle((0, 0, W, 7), fill=TEAL)
-text(46, 26, "THE WORLD / DAILY BRIEF", 16, TEAL, True)
-text(747, 28, "NO. 327  •  GLOBAL", 14, "#68645d", True)
-text(46, 63, "Monday 23 November 2026", 43, INK, True)
-text(48, 122, "Nine stories moving the world tonight", 18, GRAY)
+# Masthead: a narrow rust line gives the paper a clear top edge.
+d.rectangle((0, 0, CANVAS_WIDTH, 8), fill=RUST_ACCENT)
+
+# The desk name and edition number sit on a shared baseline.
+masthead_y = 25
+text(46, masthead_y, "THE WORLD / DAILY BRIEF", 16, RUST_ACCENT, True)
+text(747, masthead_y + 2, "NO. 327  •  GLOBAL", 14, BAR_INK, True)
+d.line((46, 52, 978, 52), fill="#d8cbb7", width=1)
+
+# Today's date carries the page's strongest type weight.
+date_label = "Monday 23 November 2026"
+text(46, 66, date_label, 42, PRIMARY_INK, True)
+
+# Pair the short deck with a small edition marker at the right edge.
+deck_y = 122
+text(48, deck_y, "Nine stories moving the world tonight", 18, MUTED_INK)
+d.rounded_rectangle((795, 117, 978, 148), radius=15, fill=BAR_TONE)
+text(836, 125, "MONDAY EDITION", 11, RUST_ACCENT, True)
+
+# A quiet lower rule separates the heading from the story cards.
+d.line((46, 165, 978, 165), fill="#d8cbb7", width=1)
 
 cards = [
     (46, 184, "#ef6461", "TECH · REDMOND", ["Microsoft: patch AI", "flaws with care"], ["Rushing AI-exposure fixes can", "risk downtime across critical", "systems."], "23 Nov  /  IANS", "chip"),
@@ -94,16 +117,22 @@ text(851, 714, "CLIMATE", 12, TEAL, True)
 text(270, 752, "COP31 collapses: no deal, first time in 17 years", 22, INK, True)
 text(270, 812, "EU and ~130 parties threw out a text that", 17, GRAY)
 text(270, 840, "skipped fossil fuels; markets slid on AI fears.  /  23 Nov", 17, GRAY)
-# A ladder beside a small flame marks the summit story.
-d.line((114, 891, 158, 765), fill=TEAL, width=6)
-d.line((185, 891, 158, 765), fill=TEAL, width=6)
-for yy in (876, 852, 828, 804):
-    d.line((125+(876-yy)//3, yy, 179-(876-yy)//3, yy), fill=TEAL, width=4)
-d.polygon(((153,767),(143,748),(157,753),(164,734),(173,757),(166,771)), fill="#ef6461")
+# Summit emblem: an ascending frame topped by a compact flame.
+left_rail = (114, 891, 158, 765)
+right_rail = (185, 891, 158, 765)
+d.line(left_rail, fill=RUST_ACCENT, width=6)
+d.line(right_rail, fill=RUST_ACCENT, width=6)
+for rung_y in (876, 852, 828, 804):
+    inset = (876 - rung_y) // 3
+    d.line((125 + inset, rung_y, 179 - inset, rung_y), fill=RUST_ACCENT, width=4)
+flame_shape = ((153, 767), (143, 748), (157, 753), (164, 734), (173, 757), (166, 771))
+d.polygon(flame_shape, fill="#ef6461")
 
-d.line((46, 938, 978, 938), fill="#c9bba5", width=1)
-text(46, 954, "WORLD DESK  •  NOV 23, 2026", 11, GRAY)
-text(788, 954, "9 STORIES  /  1 DAY", 11, TEAL, True)
+# Footer rule and desk label close the page beneath the lead panel.
+footer_y = 938
+d.line((46, footer_y, 978, footer_y), fill="#c9bba5", width=1)
+text(46, footer_y + 16, "WORLD DESK  •  NOV 23, 2026", 11, MUTED_INK)
+text(788, footer_y + 16, "9 STORIES  /  1 DAY", 11, RUST_ACCENT, True)
 os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
 im.save(OUT)
 print(f"wrote {OUT}")
