@@ -82,22 +82,23 @@ text(836, 125, "MONDAY EDITION", 11, RUST_ACCENT, True)
 d.line((46, 165, 978, 165), fill="#d8cbb7", width=1)
 
 cards = [
-    (46, 184, "#ef6461", "TECH · REDMOND", ["Microsoft: patch AI", "flaws with care"], ["Rushing AI-exposure fixes can", "risk downtime across critical", "systems."], "23 Nov  /  IANS", "chip"),
-    (526, 184, "#e8b44d", "MARKETS · SF", ["Anthropic's IPO road", "was no normal float"], ["Bankers bridled at founder", "control, in a SpaceX echo.", ""], "23 Nov  /  BS", "chart"),
-    (46, 397, "#67a9e8", "POLITICS · DC", ["Democrats hit 258", "House seats record"], ["AP: the mark fell Sunday as", "wave gains reshaped the", "House."], "23 Nov  /  AP", "flag"),
-    (526, 397, TEAL, "CLIMATE · PORTSMOUTH", ["UK digs reservoirs", "against drought"], ["£800m Havant Thicket", "reservoir is rising to help", "secure water supplies."], "23 Nov  /  SBS", "waves"),
+    (46, 184, "#ef6461", "TECH · REDMOND", "Microsoft: patch AI", "flaws with care", "Rushing AI-exposure fixes can", "risk downtime across critical", "systems.", "23 Nov  /  IANS", "chip"),
+    (526, 184, "#e8b44d", "MARKETS · SF", "Anthropic's IPO road", "was no normal float", "Bankers bridled at founder", "control, in a SpaceX echo.", "", "23 Nov  /  BS", "chart"),
+    (46, 397, "#67a9e8", "POLITICS · DC", "Democrats hit 258", "House seats record", "AP: the mark fell Sunday as", "wave gains reshaped the", "House.", "23 Nov  /  AP", "flag"),
+    (526, 397, TEAL, "CLIMATE · PORTSMOUTH", "UK digs reservoirs", "against drought", "£800m Havant Thicket", "reservoir is rising to help", "secure water supplies.", "23 Nov  /  SBS", "waves"),
 ]
-for x, y, accent, kicker, title, body, credit, glyph in cards:
-    d.rounded_rectangle((x, y, x+452, y+194), radius=16, fill=CREAM)
-    d.rounded_rectangle((x, y+13, x+6, y+181), radius=3, fill=accent)
-    text(x+22, y+14, kicker, 12, accent, True)
-    text(x+22, y+39, title[0], 20, INK, True)
-    text(x+22, y+65, title[1], 20, INK, True)
-    for i, line in enumerate(body):
+for (x, y, accent, kicker, title_line_1, title_line_2,
+     body_line_1, body_line_2, body_line_3, credit, glyph) in cards:
+    d.rounded_rectangle((x, y, x + 452, y + 194), radius=16, fill=CREAM)
+    d.rounded_rectangle((x, y + 13, x + 6, y + 181), radius=3, fill=accent)
+    text(x + 22, y + 14, kicker.upper(), 12, accent, True)
+    text(x + 22, y + 39, title_line_1, 20, INK, True)
+    text(x + 22, y + 65, title_line_2, 20, INK, True)
+    for i, line in enumerate((body_line_1, body_line_2, body_line_3)):
         if line:
-            text(x+22, y+99+i*19, line, 12, "#66717d")
-    text(x+22, y+164, credit, 11, "#7e8790", True)
-    badge(x+391, y+96, glyph, accent)
+            text(x + 22, y + 99 + i * 19, line, 12, "#66717d")
+    text(x + 22, y + 164, credit, 11, "#7e8790", True)
+    badge(x + 391, y + 96, glyph, accent)
 
 # A one-line ticker carries four more briefs between the cards and the lead.
 d.rounded_rectangle((46, 604, 978, 668), radius=14, fill="#e8ddc9")
